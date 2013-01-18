@@ -109,15 +109,23 @@
         [label.layer setBorderColor:BORDER_COLOR];
         [label.layer setBorderWidth: BORDER_WIDTH];
         
-        //Davide Cenzi, added gesture recognizer to label
-        UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchedTag:)];
-        // if labelView is not set userInteractionEnabled, you must do so
-        [label setUserInteractionEnabled:YES];
-        [label addGestureRecognizer:gesture];
-        
+        if (!self.viewOnly) {
+            //Davide Cenzi, added gesture recognizer to label
+            UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchedTag:)];
+            // if labelView is not set userInteractionEnabled, you must do so
+            [label setUserInteractionEnabled:YES];
+            [label addGestureRecognizer:gesture];
+        }
         [self addSubview:label];
     }
     sizeFit = CGSizeMake(self.frame.size.width, totalHeight + 1.0f);
+}
+
+- (void) setViewOnly:(BOOL)viewOnly{
+    if (_viewOnly != viewOnly) {
+        _viewOnly = viewOnly;
+        [self display];
+    }
 }
 
 - (CGSize)fittedSize

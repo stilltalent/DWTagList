@@ -23,6 +23,8 @@
     UIColor *lblBackgroundColor;
 }
 
+@property (nonatomic) BOOL viewOnly;
+
 @property (nonatomic, strong) UIView *view;
 @property (nonatomic, strong) NSArray *textArray;
 @property (nonatomic, strong) id<DWTagListDelegate> delegate;
@@ -31,5 +33,6 @@
 - (void)setTags:(NSArray *)array;
 - (void)display;
 - (CGSize)fittedSize;
+
 
 @end
