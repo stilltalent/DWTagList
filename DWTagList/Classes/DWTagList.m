@@ -21,7 +21,9 @@
 #define BORDER_COLOR [UIColor lightGrayColor].CGColor
 #define BORDER_WIDTH 1.0f
 
-@interface DWTagList()
+@interface DWTagList(){
+    __weak DWTagList *weakself;
+}
 
 - (void)touchedTag:(id)sender;
 
@@ -37,6 +39,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self addSubview:view];
+        weakself = self;
     }
     return self;
 }
@@ -45,13 +48,13 @@
 {
     textArray = [[NSArray alloc] initWithArray:array];
     sizeFit = CGSizeZero;
-    [self display];
+    [weakself display];
 }
 
 - (void)setLabelBackgroundColor:(UIColor *)color
 {
     lblBackgroundColor = color;
-    [self display];
+    [weakself display];
 }
 
 - (void)touchedTag:(id)sender{
