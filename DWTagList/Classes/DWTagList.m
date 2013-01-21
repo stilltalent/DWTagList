@@ -48,13 +48,13 @@
 {
     textArray = [[NSArray alloc] initWithArray:array];
     sizeFit = CGSizeZero;
-    [weakself display];
+    [self display];
 }
 
 - (void)setLabelBackgroundColor:(UIColor *)color
 {
     lblBackgroundColor = color;
-    [weakself display];
+    [self display];
 }
 
 - (void)touchedTag:(id)sender{
@@ -69,12 +69,15 @@
 
 - (void)display
 {
-    for (UILabel *subview in [self subviews]) {
+    for (UIView *subview in [self subviews]) {
         [subview removeFromSuperview];
     }
     float totalHeight = 0;
     CGRect previousFrame = CGRectZero;
     BOOL gotPreviousFrame = NO;
+    
+    NSLog(@"%@", textArray);
+    
     for (NSString *text in textArray) {
         CGSize textSize = [text sizeWithFont:[UIFont fontWithName:@"OpenSans" size:FONT_SIZE] constrainedToSize:CGSizeMake(self.frame.size.width, 1500) lineBreakMode:NSLineBreakByWordWrapping];
         textSize.width += HORIZONTAL_PADDING*2;
@@ -85,7 +88,7 @@
             totalHeight = textSize.height;
         } else {
             CGRect newRect = CGRectZero;
-            if (previousFrame.origin.x + previousFrame.size.width + textSize.width + LABEL_MARGIN > self.frame.size.width) {
+            if (previousFrame.origin.x + previousFrame.size.width + textSize.width + LABEL_MARGIN > weakself.frame.size.width) {
                 newRect.origin = CGPointMake(0, previousFrame.origin.y + textSize.height + BOTTOM_MARGIN);
                 totalHeight += textSize.height + BOTTOM_MARGIN;
             } else {
