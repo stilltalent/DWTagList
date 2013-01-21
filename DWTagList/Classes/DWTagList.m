@@ -73,7 +73,7 @@
     CGRect previousFrame = CGRectZero;
     BOOL gotPreviousFrame = NO;
     for (NSString *text in textArray) {
-        CGSize textSize = [text sizeWithFont:[UIFont systemFontOfSize:FONT_SIZE] constrainedToSize:CGSizeMake(self.frame.size.width, 1500) lineBreakMode:NSLineBreakByWordWrapping];
+        CGSize textSize = [text sizeWithFont:[UIFont fontWithName:@"OpenSans" size:FONT_SIZE] constrainedToSize:CGSizeMake(self.frame.size.width, 1500) lineBreakMode:NSLineBreakByWordWrapping];
         textSize.width += HORIZONTAL_PADDING*2;
         textSize.height += VERTICAL_PADDING*2;
         UILabel *label = nil;
@@ -93,7 +93,7 @@
         }
         previousFrame = label.frame;
         gotPreviousFrame = YES;
-        [label setFont:[UIFont systemFontOfSize:FONT_SIZE]];
+        [label setFont:[UIFont fontWithName:@"OpenSans" size:FONT_SIZE]];
         if (!lblBackgroundColor) {
             [label setBackgroundColor:BACKGROUND_COLOR];
         } else {
