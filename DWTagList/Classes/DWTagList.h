@@ -8,15 +8,11 @@
 #import <UIKit/UIKit.h>
 
 @protocol DWTagListDelegate <NSObject>
-
 @required
-
 - (void)selectedTag:(NSString*)tagName;
-
 @end
 
-@interface DWTagList : UIView
-{
+@interface DWTagList : UIView {
     UIView *view;
     NSArray *textArray;
     CGSize sizeFit;

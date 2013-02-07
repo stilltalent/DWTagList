@@ -116,7 +116,7 @@
         [label.layer setBorderWidth: BORDER_WIDTH];
         
         if (!self.viewOnly) {
-            //Davide Cenzi, added gesture recognizer to label
+            // Davide Cenzi, added gesture recognizer to label
             UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchedTag:)];
             // if labelView is not set userInteractionEnabled, you must do so
             [label setUserInteractionEnabled:YES];
