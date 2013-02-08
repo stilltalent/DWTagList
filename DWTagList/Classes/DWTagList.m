@@ -46,31 +46,18 @@
     return self;
 }
 
-- (void)setTags:(NSArray *)array
-{
+- (void)setTags:(NSArray *)array {
     textArray = [[NSArray alloc] initWithArray:array];
     sizeFit = CGSizeZero;
     [self display];
 }
 
-- (void)setLabelBackgroundColor:(UIColor *)color
-{
+- (void)setLabelBackgroundColor:(UIColor *)color {
     lblBackgroundColor = color;
     [self display];
 }
 
-- (void)touchedTag:(id)sender{
-    
-    UITapGestureRecognizer *t = (UITapGestureRecognizer*)sender;
-    UILabel *label = (UILabel*)t.view;
-    
-    if (label && self.delegate && [self.delegate respondsToSelector:@selector(selectedTag:)]) {
-        [self.delegate selectedTag:label.text];
-    }
-}
-
-- (void)display
-{
+- (void)display {
     for (UIView *subview in [self subviews]) {
         [subview removeFromSuperview];
     }
@@ -139,8 +126,7 @@
     }
 }
 
-- (CGSize)fittedSize
-{
+- (CGSize)fittedSize {
     return sizeFit;
 }
 
@@ -151,8 +137,11 @@
 
 -(void)touchUpInside:(id)sender {
     UIButton *button = (UIButton*)sender;
-    if(button && self.delegate && [self.delegate respondsToSelector:@selector(selectedTag:)]) {
-        [self.delegate selectedTag:button.titleLabel.text];
+    if (button && self.delegate && [self.delegate respondsToSelector:@selector(selectedTagText:)]) {
+        [self.delegate selectedTagText:button.titleLabel.text];
+    }
+    if (button && self.delegate && [self.delegate respondsToSelector:@selector(selectedTagButton::)]) {
+        [self.delegate selectedTagButton:button];
     }
     [button setBackgroundColor:BACKGROUND_COLOR];
 }
