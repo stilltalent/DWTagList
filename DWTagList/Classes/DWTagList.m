@@ -40,6 +40,8 @@
     if (self) {
         [self addSubview:view];
         weakself = self;
+        
+        self.highlightedBackgroundColor = [UIColor colorWithRed:0.75 green:0.75 blue:0.75 alpha:1.00];
     }
     return self;
 }
@@ -62,9 +64,9 @@
     UITapGestureRecognizer *t = (UITapGestureRecognizer*)sender;
     UILabel *label = (UILabel*)t.view;
     
-    if(label && self.delegate && [self.delegate respondsToSelector:@selector(selectedTag:)])
+    if (label && self.delegate && [self.delegate respondsToSelector:@selector(selectedTag:)]) {
         [self.delegate selectedTag:label.text];
-    
+    }
 }
 
 - (void)display
@@ -82,9 +84,11 @@
         CGSize textSize = [text sizeWithFont:[UIFont fontWithName:@"OpenSans" size:FONT_SIZE] constrainedToSize:CGSizeMake(self.frame.size.width, 1500) lineBreakMode:NSLineBreakByWordWrapping];
         textSize.width += HORIZONTAL_PADDING*2;
         textSize.height += VERTICAL_PADDING*2;
-        UILabel *label = nil;
+        
+        UIButton *button = nil;
         if (!gotPreviousFrame) {
-            label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
+            button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
             totalHeight = textSize.height;
         } else {
             CGRect newRect = CGRectZero;
@@ -95,34 +99,41 @@
                 newRect.origin = CGPointMake(previousFrame.origin.x + previousFrame.size.width + LABEL_MARGIN, previousFrame.origin.y);
             }
             newRect.size = textSize;
-            label = [[UILabel alloc] initWithFrame:newRect];
+            button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setFrame:newRect];
         }
-        previousFrame = label.frame;
+        previousFrame = button.frame;
         gotPreviousFrame = YES;
-        [label setFont:[UIFont fontWithName:@"OpenSans" size:FONT_SIZE]];
+        [button.titleLabel setFont:[UIFont fontWithName:@"OpenSans" size:FONT_SIZE]];
         if (!lblBackgroundColor) {
-            [label setBackgroundColor:BACKGROUND_COLOR];
+            [button setBackgroundColor:BACKGROUND_COLOR];
         } else {
-            [label setBackgroundColor:lblBackgroundColor];
+            [button setBackgroundColor:lblBackgroundColor];
         }
-        [label setTextColor:TEXT_COLOR];
-        [label setText:text];
-        [label setTextAlignment:NSTextAlignmentCenter];
-        [label setShadowColor:TEXT_SHADOW_COLOR];
-        [label setShadowOffset:TEXT_SHADOW_OFFSET];
-        [label.layer setMasksToBounds:YES];
-        [label.layer setCornerRadius:CORNER_RADIUS];
-        [label.layer setBorderColor:BORDER_COLOR];
-        [label.layer setBorderWidth: BORDER_WIDTH];
+        [button setTitle:text forState:UIControlStateNormal];
+        [button setTitleColor:TEXT_COLOR forState:UIControlStateNormal];
+        [button setTitleShadowColor:TEXT_SHADOW_COLOR forState:UIControlStateNormal];
+        [button setTitleShadowColor:[UIColor colorWithWhite:1.000 alpha:0.5] forState:UIControlStateHighlighted];
+        [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
+        [button.titleLabel setShadowOffset:TEXT_SHADOW_OFFSET];
+        [button.layer setMasksToBounds:YES];
+        [button.layer setCornerRadius:CGRectGetHeight(button.frame) / 2];
+        [button.layer setBorderColor:BORDER_COLOR];
+        [button.layer setBorderWidth:BORDER_WIDTH];
         
         if (!self.viewOnly) {
-            //Davide Cenzi, added gesture recognizer to label
-            UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchedTag:)];
-            // if labelView is not set userInteractionEnabled, you must do so
-            [label setUserInteractionEnabled:YES];
-            [label addGestureRecognizer:gesture];
+            [button addTarget:self action:@selector(touchDownInside:) forControlEvents:UIControlEventTouchDown];
+            [button addTarget:self action:@selector(touchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+            [button addTarget:self action:@selector(touchDragExit:) forControlEvents:UIControlEventTouchDragExit];
+            [button addTarget:self action:@selector(touchDragInside:) forControlEvents:UIControlEventTouchDragInside];
+            
+//            //Davide Cenzi, added gesture recognizer to label
+//            UITapGestureRecognizer* gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchedTag:)];
+//            // if labelView is not set userInteractionEnabled, you must do so
+//            [label setUserInteractionEnabled:YES];
+//            [label addGestureRecognizer:gesture];
         }
-        [self addSubview:label];
+        [self addSubview:button];
     }
     sizeFit = CGSizeMake(self.frame.size.width, totalHeight + 1.0f);
 }
@@ -137,6 +148,29 @@
 - (CGSize)fittedSize
 {
     return sizeFit;
+}
+
+-(void)touchDownInside:(id)sender {
+    UIButton *button = (UIButton*)sender;
+    [button setBackgroundColor:self.highlightedBackgroundColor];
+}
+
+-(void)touchUpInside:(id)sender {
+    UIButton *button = (UIButton*)sender;
+    if(button && self.delegate && [self.delegate respondsToSelector:@selector(selectedTag:)]) {
+        [self.delegate selectedTag:button.titleLabel.text];
+    }
+    [button setBackgroundColor:BACKGROUND_COLOR];
+}
+
+-(void)touchDragExit:(id)sender {
+    UIButton *button = (UIButton*)sender;
+    [button setBackgroundColor:BACKGROUND_COLOR];
+}
+
+-(void)touchDragInside:(id)sender {
+    UIButton *button = (UIButton*)sender;
+    [button setBackgroundColor:self.highlightedBackgroundColor];
 }
 
 @end
