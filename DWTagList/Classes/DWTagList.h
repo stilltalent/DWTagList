@@ -30,5 +30,6 @@
 - (void)display;
 - (CGSize)fittedSize;
 
+@property (nonatomic, strong) UIColor *highlightedBackgroundColor;
 
 @end
