@@ -140,7 +140,7 @@
     if (button && self.delegate && [self.delegate respondsToSelector:@selector(selectedTagText:)]) {
         [self.delegate selectedTagText:button.titleLabel.text];
     }
-    if (button && self.delegate && [self.delegate respondsToSelector:@selector(selectedTagButton::)]) {
+    if (button && self.delegate && [self.delegate respondsToSelector:@selector(selectedTagButton:)]) {
         [self.delegate selectedTagButton:button];
     }
     [button setBackgroundColor:BACKGROUND_COLOR];
