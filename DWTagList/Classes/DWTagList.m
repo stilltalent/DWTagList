@@ -25,8 +25,6 @@
     __weak DWTagList *weakself;
 }
 
-- (void)touchedTag:(id)sender;
-
 @end
 
 @implementation DWTagList
@@ -69,13 +67,13 @@
     
     for (NSString *text in textArray) {
         CGSize textSize = [text sizeWithFont:[UIFont fontWithName:@"OpenSans" size:FONT_SIZE] constrainedToSize:CGSizeMake(self.frame.size.width, 1500) lineBreakMode:NSLineBreakByWordWrapping];
-        textSize.width += HORIZONTAL_PADDING*2;
-        textSize.height += VERTICAL_PADDING*2;
+        textSize.width += HORIZONTAL_PADDING * 2;
+        textSize.height += VERTICAL_PADDING * 2;
         
         UIButton *button = nil;
         if (!gotPreviousFrame) {
             button = [UIButton buttonWithType:UIButtonTypeCustom];
-            [button setFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
+            [button setFrame:CGRectMake(0, 0, MAX(textSize.width, textSize.height + 2), textSize.height)];
             totalHeight = textSize.height;
         } else {
             CGRect newRect = CGRectZero;
@@ -86,6 +84,7 @@
                 newRect.origin = CGPointMake(previousFrame.origin.x + previousFrame.size.width + LABEL_MARGIN, previousFrame.origin.y);
             }
             newRect.size = textSize;
+            newRect.size.width = MAX(newRect.size.width, newRect.size.height + 2);
             button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button setFrame:newRect];
         }
